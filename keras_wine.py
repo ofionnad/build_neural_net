@@ -5,8 +5,9 @@
 ###########################
 import numpy as np
 import matplotlib.pyplot as plt
-from keras.layers import Dense
-from keras.models import Sequential
+from tensorflow import keras
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.models import Sequential
 from keras.utils import np_utils
 from sklearn.preprocessing import normalize
 from sklearn import datasets
@@ -31,11 +32,15 @@ X_train, X_test, y_train, y_test = train_test_split(df.values, Y_data, test_size
 #build a model
 model = Sequential()
 model.add(Dense(52, input_shape=(13,), activation='relu'))
+model.add(Dropout(0.2))
 model.add(Dense(26, activation='relu'))
+model.add(Dropout(0.2))
 model.add(Dense(13, activation='relu'))
-model.add(Dense(3, activation='relu'))
+model.add(Dense(3, activation='sigmoid'))
 
-model.compile(loss='mse', optimizer='sgd', metrics=['mean_squared_error', 'accuracy'])
+model.compile(loss=keras.losses.CategoricalCrossentropy(), optimizer='adam', metrics=['mean_squared_error', 'accuracy'])
+
+## Note that if you want to monitor your metrics, tensorboard in recommended!!
 
 print(model.summary())
 
